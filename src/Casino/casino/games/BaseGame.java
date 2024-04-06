@@ -1,12 +1,31 @@
 package Casino.casino.games;
 
-public class BaseGame {
-    public String name;
+/**
+ * The BaseGame class represents a basic game in the casino.
+ */
+public abstract class BaseGame {
+    private String name;
+
+    /**
+     * Constructs a BaseGame instance with the specified name.
+     *
+     * @param name The name of the game.
+     */
+    public BaseGame(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets the name of the game.
+     *
+     * @return The name of the game.
+     */
+    public String getName() {
+        return name;
+    }
 
     /**
      * Plays the game.
      */
-    public void playGame(){
-        System.out.println("Playing the game " + this.name);
-    }
+    public abstract void playGame();
 }
