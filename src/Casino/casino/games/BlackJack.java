@@ -1,13 +1,21 @@
 package Casino.casino.games;
 
 /**
- * The BaseGame class represents a basic game in the casino.
+ * The BlackJack class represents the Blackjack game in the casino.
  */
 public class BlackJack extends BaseGame {
     /**
-     * Plays the game.
+     * Constructs a BlackJack instance.
      */
     public BlackJack() {
-        this.name = "BlackJack";
+        super("BlackJack");
+    }
+
+    /**
+     * Plays the BlackJack game.
+     */
+    @Override
+    public void playGame() {
+        System.out.println("Playing the game: " + getName());
     }
 }
