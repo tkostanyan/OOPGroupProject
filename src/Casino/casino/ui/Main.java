@@ -93,7 +93,7 @@ public class Main extends JFrame {
         casino = new Casino(user);
 
         // Welcome message
-        JLabel welcomeLabel = new JLabel("Welcome, " + usernameField.getText() + "!");
+        JLabel welcomeLabel = new JLabel("Welcome, " + user.getName() + "!");
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
         add(welcomeLabel, BorderLayout.NORTH);
 

@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class BlackJack extends BaseGame {
-    private List<Card> deck;
-    private List<Card> playerHand;
-    private List<Card> dealerHand;
 
 
     public static class Card {
@@ -21,9 +18,6 @@ public class BlackJack extends BaseGame {
             this.value = value;
         }
 
-        public String getSuit() {
-            return suit;
-        }
 
         public String getRank() {
             return rank;
@@ -77,14 +71,6 @@ public class BlackJack extends BaseGame {
             hand = new ArrayList<>();
         }
 
-        public void placeBet(int amount) {
-            if (amount <= balance) {
-                bet = amount;
-                balance -= amount;
-            } else {
-                System.out.println("Insufficient balance to place the bet.");
-            }
-        }
 
         public void addCard(Card card) {
             hand.add(card);
