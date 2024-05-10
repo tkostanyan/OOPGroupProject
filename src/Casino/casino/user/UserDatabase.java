@@ -1,12 +1,8 @@
 package Casino.casino.user;
 
 import Casino.casino.user.exceptions.IllegalPasswordException;
-import Casino.casino.user.exceptions.IllegalUserException;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -25,42 +21,6 @@ public class UserDatabase {
 //        load();
     }
 
-    /**
-     * Loads user data from the database file into the users list.
-     */
-    private static User find(String username) throws IllegalUserException {
-        Scanner inputStream = null;
-        try {
-            inputStream = new Scanner(new FileInputStream(DATABASE_RELATIVE_PATH));
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found");
-            System.exit(0);
-        }
-
-        while(inputStream.hasNextLine()) {
-            User us = new User(inputStream.nextLine());
-            if (us.getName().equals(username)) return us;
-        }
-        inputStream.close();
-
-        return new User()
-    }
-
-    /**
-     * Saves user data from the users list to the database file.
-     */
-    public void save(String username, String password) {
-        try {
-            PrintWriter outputStream = new PrintWriter(new FileOutputStream(DATABASE_RELATIVE_PATH));
-            outputStream.println(new User(username, password, 0.0));
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            System.err.println("User not saved");
-            System.exit(0);
-        }
-    }
-
-
 
     /**
      * Authenticates a user based on the provided username and password.
@@ -71,12 +31,92 @@ public class UserDatabase {
      * @param username The username of the user to authenticate.
      * @param password The password of the user to authenticate.
      * @return The authenticated user object if authentication is successful
-     * @throws IllegalUserException if the username or password does not meet the requirements.
+     * @throws IllegalPasswordException if the username or password does not meet the requirements.
      */
-    public static User authenticateUser(String username, String password) throws IllegalUserException {
-        User user = find(username);
-        if (user.getPassword().equals(password)) return user;
-        else throw new IllegalPasswordException("Wrong password");
+    public static User authenticateUser(String username, String password) throws IllegalPasswordException {
+        Scanner inputStream = null;
+        try {
+            inputStream = new Scanner(new FileInputStream(DATABASE_RELATIVE_PATH));
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found");
+            System.exit(0);
+        }
+
+        while (inputStream.hasNextLine()) {
+            User us = new User(inputStream.nextLine());
+            if (us.getName().equals(username) && us.getPassword().equals(password)) return us;
+            System.out.println(us.getName() + " " + us.getPassword());
+            if (us.getName().equals(username) && !us.getPassword().equals(password))
+                throw new IllegalPasswordException("Wrong password");
+        }
+        inputStream.close();
+
+        User newUser = new User(username, password, 0.);
+        newUser.save();
+        return newUser;
     }
+
+    public static int findUser(String username) {
+        Scanner inputStream = null;
+        try {
+            inputStream = new Scanner(new FileInputStream(DATABASE_RELATIVE_PATH));
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found");
+            System.exit(0);
+        }
+        int i = 1;
+        while (inputStream.hasNextLine()) {
+            User us = new User(inputStream.nextLine());
+            if (us.getName().equals(username)) return i;
+        }
+        inputStream.close();
+        return -1;
+    }
+
+    /**
+     * Saves user data from the users list to the database file.
+     */
+    public static void save(User user) {
+        PrintWriter outputStream = null;
+        try {
+            outputStream = new PrintWriter(new FileOutputStream(DATABASE_RELATIVE_PATH, true));
+        } catch (FileNotFoundException e) {
+            System.err.println("User not saved");
+            System.exit(0);
+        }
+
+        int userRow = findUser(user.getName());
+
+        if (userRow != -1) {
+            StringBuilder content = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new FileReader(DATABASE_RELATIVE_PATH))) {
+                String line;
+                int lineNumber = 0;
+                while ((line = reader.readLine()) != null) {
+                    lineNumber++;
+                    if (lineNumber == userRow) {
+                        content.append(user).append(System.lineSeparator());
+                    } else {
+                        content.append(line).append(System.lineSeparator());
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace(); // Handle the exception properly in your application
+            }
+
+            try {
+                outputStream = new PrintWriter(new FileOutputStream(DATABASE_RELATIVE_PATH));
+            } catch (FileNotFoundException e) {
+                System.err.println("User not saved");
+                System.exit(0);
+            }
+            outputStream.print(content);
+        } else {
+            outputStream.println(user);
+
+        }
+        outputStream.close();
+    }
+
 
 }

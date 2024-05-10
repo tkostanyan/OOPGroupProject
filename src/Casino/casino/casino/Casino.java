@@ -25,6 +25,7 @@ public class Casino {
 
     public void addToBalance(double balance) {
         this.user.setBalance(user.getBalance() + balance);
+        this.user.save();
     }
 
     public User getUser(){

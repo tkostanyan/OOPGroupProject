@@ -4,7 +4,7 @@ import Casino.casino.casino.Casino;
 import Casino.casino.games.Roulette;
 import Casino.casino.user.User;
 import Casino.casino.user.UserDatabase;
-import Casino.casino.user.exceptions.IllegalUserException;
+import Casino.casino.user.exceptions.IllegalPasswordException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,18 +51,17 @@ public class Main extends JFrame {
         setSize(500, 400); // Increased size for a bigger panel
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        String username = "";
+        String password = "";
+
         LoginPanel loginPanel = new LoginPanel();
         int result = JOptionPane.showConfirmDialog(null, loginPanel, "Login", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            String username = loginPanel.getUsername();
-            String password = loginPanel.getPassword();
+            username = loginPanel.getUsername();
+            password = loginPanel.getPassword();
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Username or password cannot be empty. Exiting...");
                 System.exit(0);
-            } else {
-                // Continue with authentication logic here
-                System.out.println("Username: " + username);
-                System.out.println("Password: " + password);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Login canceled. Exiting...");
@@ -85,9 +84,10 @@ public class Main extends JFrame {
         add(passwordField);
         User user = null;
         try {
-            user = UserDatabase.authenticateUser(usernameField.getText(), passwordField.getText());
-        } catch (IllegalUserException e) {
-            JOptionPane.showMessageDialog(null, "Login canceled. Exiting...");
+            user = UserDatabase.authenticateUser(username, password);
+        } catch (IllegalPasswordException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.exit(0);
         }
 
         casino = new Casino(user);

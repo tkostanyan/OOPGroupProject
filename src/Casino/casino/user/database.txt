@@ -1,3 +1,4 @@
-Khoren,Khudaverdyan2003$,120.0
-Narek,Galstyan2003$,150.0
-Tigran,Kostanyan2003$,185.0
+Ani,test,140.0
+Karmen,gesh,150.0
+Haso,pis,185.0
+vardan,sdgfa,0.0

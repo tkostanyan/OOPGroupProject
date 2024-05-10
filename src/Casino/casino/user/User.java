@@ -1,6 +1,6 @@
 package Casino.casino.user;
 
-import Casino.casino.user.exceptions.IllegalUserException;
+import Casino.casino.user.exceptions.IllegalPasswordException;
 
 /**
  * The User class represents a user of the casino application.
@@ -29,7 +29,7 @@ public class User implements Comparable<User> {
      *
      * @param details A string containing user details.
      */
-    public User (String details) throws IllegalUserException {
+    public User (String details){
         String[] components = details.split(",");
         this.name = components[0];
         this.password = components[1];
@@ -61,6 +61,10 @@ public class User implements Comparable<User> {
      */
     public String getPassword() {
         return password;
+    }
+
+    public void save(){
+        UserDatabase.save(this);
     }
 
     /**

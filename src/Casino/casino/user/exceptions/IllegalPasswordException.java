@@ -3,7 +3,7 @@ package Casino.casino.user.exceptions;
 /**
  * The IllegalPasswordException class represents an exception that is thrown when an illegal password is encountered.
  */
-public class IllegalPasswordException extends IllegalUserException {
+public class IllegalPasswordException extends Exception {
     /**
      * Constructs an IllegalPasswordException with a default error message.
      */
