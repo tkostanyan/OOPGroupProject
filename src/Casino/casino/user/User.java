@@ -17,8 +17,7 @@ public class User implements Comparable<User> {
      * @param password The password of the user.
      * @param balance  The initial balance of the user.
      */
-    public User(String name, String password, double balance) throws IllegalUserException {
-        UserDatabase.verifyUserCreation(name, password);
+    public User(String name, String password, double balance) {
         this.name = name;
         this.password = password;
         this.balance = balance;
@@ -32,7 +31,6 @@ public class User implements Comparable<User> {
      */
     public User (String details) throws IllegalUserException {
         String[] components = details.split(",");
-        UserDatabase.verifyUserCreation(components[0], components[1]);
         this.name = components[0];
         this.password = components[1];
         this.balance = Double.parseDouble(components[2]);
@@ -70,7 +68,7 @@ public class User implements Comparable<User> {
      *
      * @param balance The balance to update.
      */
-    public void updateBalance(double balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

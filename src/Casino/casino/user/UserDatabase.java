@@ -3,6 +3,7 @@ package Casino.casino.user;
 import Casino.casino.user.exceptions.IllegalPasswordException;
 import Casino.casino.user.exceptions.IllegalUserException;
 import Casino.casino.user.exceptions.IllegalUsernameException;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -35,18 +36,20 @@ public class UserDatabase {
     /**
      * Loads user data from the database file into the users list.
      */
-    private void load() {
+    private User find(String username) {
         try {
             Scanner inputStream = new Scanner(new FileInputStream(DATABASE_RELATIVE_PATH));
             int usersCount = inputStream.nextInt();
-            users= new ArrayList<>(usersCount);
+//            users = new ArrayList<>(usersCount);
             inputStream.nextLine();
 
             for (int i = 0; i < usersCount; i++) {
-                User current = new User(inputStream.nextLine());
-                if(!contains(current)) users.add(current);
+                User us = new User(inputStream.nextLine();
+                if (us.getName().equals(username)){
+                    return us;
+                }
             }
-            Collections.sort(users);
+//            Collections.sort(users);
             inputStream.close();
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
@@ -116,38 +119,19 @@ public class UserDatabase {
      * @return The authenticated user object if authentication is successful
      * @throws IllegalUserException if the username or password does not meet the requirements.
      */
-    public static User authenticateUser(String username, String password) throws IllegalUserException{
+    public static User authenticateUser(String username, String password) throws IllegalUserException {
         for (User user : users) {
             if (user.getName().equals(username) && user.getPassword().equals(password)) return user;
         }
-        verifyUserCreation(username, password);
+//        verifyUserCreation(username, password);
+        for (User user : users) {
+            if (user.getName().equals(username)) throw new IllegalUserException("Wrong password");
+        }
         User newUser = new User(username, password, 0.0);
         users.add(newUser);
         Collections.sort(users);
         return newUser;
     }
 
-    /**
-     * Verifies if the provided username and password meet the requirements for user creation.
-     * Throws exceptions if the username or password provided are improper.
-     *
-     * @param username The username to verify.
-     * @param password The password to verify.
-     * @throws IllegalUsernameException if the username does not meet the requirements.
-     * @throws IllegalPasswordException if the password does not meet the requirements.
-     */
-    public static void verifyUserCreation(String username, String password) throws IllegalUserException {
-        if (username.length() < 5) {
-            throw new IllegalUsernameException("Username must be at least 5 characters long.");
-        }
 
-        if (!username.matches("^[a-zA-Z0-9!@#$%^&*]+$")) {
-            throw new IllegalUsernameException();
-        }
-
-        String passwordPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$";
-        if (!password.matches(passwordPattern)) {
-            throw new IllegalPasswordException();
-        }
-    }
 }

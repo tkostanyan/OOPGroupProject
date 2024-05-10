@@ -3,6 +3,8 @@ package Casino.casino.ui;
 import Casino.casino.casino.Casino;
 import Casino.casino.games.Roulette;
 import Casino.casino.user.User;
+import Casino.casino.user.UserDatabase;
+import Casino.casino.user.exceptions.IllegalUserException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +43,8 @@ public class Main extends JFrame {
 
         public String getPassword() {
             return new String(passwordField.getPassword());
-        }}
+        }
+    }
 
     public Main() {
         setTitle("Casino");
@@ -67,7 +70,6 @@ public class Main extends JFrame {
         }
 
 
-
 //        if (username == null || username.trim().isEmpty()) {
 //            JOptionPane.showMessageDialog(null, "Username cannot be empty. Exiting...");
 //            System.exit(0);
@@ -81,8 +83,12 @@ public class Main extends JFrame {
         add(usernameField);
         add(passwordLabel);
         add(passwordField);
-
-        User user = User.getUser(usernameField.getText(), "test");
+        User user = null;
+        try {
+            user = UserDatabase.authenticateUser(usernameField.getText(), passwordField.getText());
+        } catch (IllegalUserException e) {
+            JOptionPane.showMessageDialog(null, "Login canceled. Exiting...");
+        }
 
         casino = new Casino(user);
 
@@ -171,7 +177,7 @@ public class Main extends JFrame {
 
     }
 
-    public void startRouletteGame(){
+    public void startRouletteGame() {
 
         SwingUtilities.invokeLater(() -> {
             rouletteGUI = new RouletteGUI(casino, this.balanceLabel);
