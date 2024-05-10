@@ -23,9 +23,4 @@ public abstract class BaseGame {
     public String getName() {
         return name;
     }
-
-    /**
-     * Plays the game.
-     */
-    public abstract void playGame();
 }

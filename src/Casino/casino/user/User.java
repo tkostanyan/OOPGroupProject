@@ -25,6 +25,11 @@ public class User {
         this.name = name;
     }
 
+    public User(User original){
+        this.balance = original.balance;
+        this.name = original.name;
+    }
+
     /**
      * Gets the balance of the user.
      *
@@ -50,6 +55,10 @@ public class User {
      */
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public static User getUser(String username, String password){
+        return new User(username, 0.);
     }
 
 }

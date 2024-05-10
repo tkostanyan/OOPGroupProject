@@ -14,11 +14,6 @@ import java.util.Scanner;
  */
 public class Main {
     /**
-     * Array to store the available games in the casino.
-     */
-    private static final BaseGame[] games = {new BlackJack(), new Roulette()};
-
-    /**
      * Array to store the registered users of the casino application.
      */
     private static User[] users = new User[0]; // TODO Optimize user creation
@@ -33,8 +28,8 @@ public class Main {
 
         System.out.println("You are logged in as a " + user.getName() + " with balance " + user.getBalance());
 
-        Casino casino = new Casino(games, user.getBalance());
-        casino.displayAvailableGames();
+        Casino casino = new Casino(user);
+//        casino.displayAvailableGames();
     }
 
     /**
